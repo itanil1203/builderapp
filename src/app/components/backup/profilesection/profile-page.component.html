@@ -1,0 +1,115 @@
+<section aria-label="User Profile" class="profile-section">
+  <header class="profile-header">
+    <img
+      class="profile-image"
+      [src]="userProfile.profilePicture"
+      [alt]="userProfile.firstName + ' ' + userProfile.lastName + ' profile picture'"
+    />
+    <div class="profile-info">
+      <h1 class="profile-name">
+        <span>{{userProfile.firstName}}</span>
+        <span>{{userProfile.lastName}}</span>
+      </h1>
+      <p class="profile-subtitle">Profile Details</p>
+    </div>
+  </header>
+
+  <main class="profile-fields">
+    <div
+      *ngFor="let field of getProfileFields(); trackBy: trackByField"
+      class="field-container"
+    >
+      <div class="field-label">{{field.label}}</div>
+      <div class="field-value">
+        <ng-container [ngSwitch]="field.key">
+          <!-- Email field with editing capability -->
+          <div *ngSwitchCase="'email'">
+            <div *ngIf="isEditing" class="input-container">
+              <label for="email" class="visually-hidden">Email Address</label>
+              <input
+                id="email"
+                type="email"
+                [(ngModel)]="tempEmail"
+                [attr.aria-invalid]="!!errors.email"
+                [attr.aria-describedby]="errors.email ? 'email-error' : null"
+                class="form-input"
+                [class.error]="!!errors.email"
+              />
+              <div
+                *ngIf="errors.email"
+                id="email-error"
+                role="alert"
+                class="error-message"
+              >
+                {{errors.email}}
+              </div>
+            </div>
+            <span *ngIf="!isEditing">{{userProfile.email}}</span>
+          </div>
+
+          <!-- Contact field with editing capability -->
+          <div *ngSwitchCase="'contact'">
+            <div *ngIf="isEditing" class="input-container">
+              <label for="contact" class="visually-hidden"
+                >Contact Number</label
+              >
+              <input
+                id="contact"
+                type="tel"
+                [(ngModel)]="tempContact"
+                [attr.aria-invalid]="!!errors.contact"
+                [attr.aria-describedby]="errors.contact ? 'contact-error' : null"
+                class="form-input"
+                [class.error]="!!errors.contact"
+              />
+              <div
+                *ngIf="errors.contact"
+                id="contact-error"
+                role="alert"
+                class="error-message"
+              >
+                {{errors.contact}}
+              </div>
+            </div>
+            <span *ngIf="!isEditing">{{userProfile.contactNumber}}</span>
+          </div>
+
+          <!-- Read-only fields -->
+          <span *ngSwitchDefault>{{field.value}}</span>
+        </ng-container>
+      </div>
+    </div>
+  </main>
+
+  <footer class="profile-actions">
+    <ng-container *ngIf="isEditing; else viewMode">
+      <button
+        class="cancel-button"
+        aria-label="Cancel editing profile"
+        (click)="cancelEdit()"
+        (keydown)="onKeydown($event, cancelEdit.bind(this))"
+      >
+        Cancel
+      </button>
+      <button
+        class="save-button"
+        aria-label="Save profile changes"
+        (click)="saveChanges()"
+        (keydown)="onKeydown($event, saveChanges.bind(this))"
+      >
+        Save Changes
+      </button>
+    </ng-container>
+
+    <ng-template #viewMode>
+      <button
+        class="edit-button"
+        aria-label="Edit profile information"
+        (click)="startEditing()"
+        (keydown)="onKeydown($event, startEditing.bind(this))"
+      >
+        Edit Profile
+      </button>
+    </ng-template>
+  </footer>
+</section>

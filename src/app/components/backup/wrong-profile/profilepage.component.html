@@ -1,0 +1,33 @@
+<main
+  class="px-5 py-10 mx-auto my-0 bg-white rounded-xl max-w-[800px] shadow-[0_4px_6px_rgba(0,0,0,0.1)] max-sm:p-5"
+>
+  <div *ngIf="isLoading" class="text-center py-8">
+    <p class="text-gray-600">Loading profile...</p>
+  </div>
+
+  <div
+    *ngIf="error"
+    class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg"
+  >
+    <p class="text-red-700">{{ error }}</p>
+  </div>
+
+  <div *ngIf="!isLoading">
+    <app-profile-header
+      [userProfile]="userProfile"
+      [isEditing]="isEditing"
+      (toggleEdit)="toggleEdit()"
+    ></app-profile-header>
+
+    <app-profile-info
+      *ngIf="!isEditing"
+      [userProfile]="userProfile"
+    ></app-profile-info>
+
+    <app-profile-form
+      *ngIf="isEditing"
+      [userProfile]="userProfile"
+      (saveChanges)="handleSave($event)"
+    ></app-profile-form>
+  </div>
+</main>

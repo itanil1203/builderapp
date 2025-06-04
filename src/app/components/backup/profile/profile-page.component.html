@@ -1,0 +1,107 @@
+<main
+  class="px-5 py-10 mx-auto my-0 bg-white rounded-xl max-w-[800px] shadow-[0_4px_6px_rgba(0,0,0,0.1)] max-sm:p-5"
+>
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="text-center py-8">
+    <p class="text-stone-500">Loading profile...</p>
+  </div>
+
+  <!-- Error State -->
+  <div
+    *ngIf="error && !isLoading"
+    class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg"
+  >
+    <p class="text-red-700">{{ error }}</p>
+    <button
+      class="mt-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+      (click)="loadUserProfile()"
+      type="button"
+    >
+      Retry
+    </button>
+  </div>
+
+  <!-- Profile Content -->
+  <div *ngIf="!isLoading">
+    <!-- Profile Header -->
+    <header
+      class="flex gap-8 items-center mb-10 max-sm:flex-col max-sm:text-center"
+    >
+      <div class="overflow-hidden relative rounded-full h-[150px] w-[150px]">
+        <img
+          class="object-cover overflow-hidden aspect-square size-full"
+          [src]="userProfile.profilePicture"
+          [alt]="userProfile.firstName + ' ' + userProfile.lastName + ' profile picture'"
+        />
+      </div>
+      <div class="flex-1">
+        <h1 class="mb-2.5 text-3xl font-bold text-zinc-900">
+          <span>{{ userProfile.firstName }}</span>
+          <span>{{ userProfile.lastName }}</span>
+        </h1>
+        <p class="mb-5 text-base text-stone-500">{{ userProfile.email }}</p>
+        <button
+          class="px-5 py-2.5 bg-gray-700 rounded-md cursor-pointer border-none duration-200 text-white transition-colors hover:bg-gray-800"
+          [attr.aria-label]="isEditing ? 'Cancel profile editing' : 'Edit profile information'"
+          (click)="toggleEditAction()"
+          type="button"
+        >
+          <span *ngIf="isEditing">Cancel Edit</span>
+          <span *ngIf="!isEditing">Edit Profile</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Profile Content -->
+    <section>
+      <!-- Read-only View -->
+      <div *ngIf="!isEditing" class="grid gap-5 grid-cols-2 max-sm:grid-cols-1">
+        <div
+          *ngFor="let field of getProfileFields(); trackBy: trackByProfileField"
+          class="p-4 bg-gray-50 rounded-lg"
+        >
+          <div class="mb-1.5 text-sm text-stone-500">{{ field[0] }}</div>
+          <div class="text-base text-zinc-900">
+            {{ field[1] || 'Not specified' }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit Form -->
+      <form
+        *ngIf="isEditing"
+        class="grid gap-5 grid-cols-2 max-sm:grid-cols-1"
+        (submit)="handleSaveAction($event)"
+      >
+        <div *ngFor="let field of getEditFields(); trackBy: trackByEditField">
+          <label
+            class="block mb-2 text-sm text-stone-500"
+            [for]="'edit-' + field[3]"
+          >
+            {{ field[0] }}
+          </label>
+          <input
+            class="p-2.5 w-full text-base rounded-md border border-solid border-zinc-300 focus:border-gray-500 focus:outline-none transition-colors"
+            [type]="field[1]"
+            [value]="field[2]"
+            [id]="'edit-' + field[3]"
+            [name]="field[3]"
+            [attr.aria-label]="'Edit ' + field[0]"
+            (input)="updateFieldAction(field[3], $any($event.target).value)"
+            required
+          />
+        </div>
+
+        <button
+          class="p-3 bg-gray-700 rounded-md cursor-pointer border-none col-span-2 duration-200 text-white transition-colors hover:bg-gray-800 max-sm:col-span-1"
+          type="submit"
+          aria-label="Save profile changes"
+          [disabled]="isLoading"
+        >
+          <span *ngIf="!isLoading">Save Changes</span>
+          <span *ngIf="isLoading">Saving...</span>
+        </button>
+      </form>
+    </section>
+  </div>
+</main>

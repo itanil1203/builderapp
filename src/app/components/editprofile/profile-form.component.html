@@ -1,0 +1,154 @@
+<main class="profile-container">
+  <section class="profile-card">
+    <header>
+      <h1 class="profile-title">Profile Details</h1>
+    </header>
+
+    <form
+      class="profile-form"
+      (ngSubmit)="handleSubmit($event)"
+      
+    >
+      <div class="form-field">
+        <label for="firstName" class="field-label">First Name</label>
+        <input
+          class="form-input"
+          id="firstName"
+          name="firstName"
+          type="text"
+          aria-required="true"
+          aria-describedby="firstName-error"
+          [value]="profile.firstName"
+          [attr.aria-invalid]="!!errors.firstName"
+          [disabled]="!isEditing"
+          (input)="handleInput('firstName', $event)"
+        />
+        <div
+          role="alert"
+          id="firstName-error"
+          class="error-message"
+          *ngIf="errors.firstName"
+        >
+          {{errors.firstName}}
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="lastName" class="field-label">Last Name</label>
+        <input
+          class="form-input"
+          id="lastName"
+          name="lastName"
+          type="text"
+          aria-required="true"
+          aria-describedby="lastName-error"
+          [value]="profile.lastName"
+          [attr.aria-invalid]="!!errors.lastName"
+          [disabled]="!isEditing"
+          (input)="handleInput('lastName', $event)"
+        />
+        <div
+          role="alert"
+          id="lastName-error"
+          class="error-message"
+          *ngIf="errors.lastName"
+        >
+          {{errors.lastName}}
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="email" class="field-label">Email</label>
+        <input
+          class="form-input"
+          id="email"
+          name="email"
+          type="email"
+          aria-required="true"
+          aria-describedby="email-error"
+          [value]="profile.email"
+          [attr.aria-invalid]="!!errors.email"
+          [disabled]="!isEditing"
+          (input)="handleInput('email', $event)"
+        />
+        <div
+          role="alert"
+          id="email-error"
+          class="error-message"
+          *ngIf="errors.email"
+        >
+          {{errors.email}}
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="phone" class="field-label">Phone</label>
+        <input
+          class="form-input"
+          id="phone"
+          name="phone"
+          type="tel"
+          aria-required="true"
+          aria-describedby="phone-error"
+          [value]="profile.phone"
+          [attr.aria-invalid]="!!errors.phone"
+          [disabled]="!isEditing"
+          (input)="handleInput('phone', $event)"
+        />
+        <div
+          role="alert"
+          id="phone-error"
+          class="error-message"
+          *ngIf="errors.phone"
+        >
+          {{errors.phone}}
+        </div>
+      </div>
+    </form>
+
+    <footer class="form-actions">
+      <ng-container *ngIf="isEditing; else viewMode">
+        <button
+          class="cancel-button"
+          type="button"
+          (click)="cancelEdit()"
+          (keydown)="handleKeyDown($event, cancelEdit)"
+        >
+          Cancel
+        </button>
+        <button
+          class="save-button"
+          type="submit"
+          (click)="handleSubmit($event)"
+          (keydown)="handleKeyDown($event, handleSubmit)"
+        >
+          Save Changes
+        </button>
+      </ng-container>
+
+      <ng-template #viewMode>
+        <button
+          class="edit-button"
+          type="button"
+          (click)="toggleEdit()"
+          (keydown)="handleKeyDown($event, toggleEdit)"
+        >
+          Edit Profile
+        </button>
+      </ng-template>
+    </footer>
+
+    <div
+      role="status"
+      aria-live="polite"
+      class="status-message"
+      [ngClass]="{
+        'status-error': formStatus.includes('error') || formStatus.includes('Failed'),
+        'status-success': formStatus.includes('success') || formStatus.includes('updated')
+      }"
+      *ngIf="formStatus"
+    >
+      {{formStatus}}
+    </div>
+  </section>
+</main>

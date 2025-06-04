@@ -1,0 +1,97 @@
+<main class="login-container">
+  <section class="login-card">
+    <div class="login-content">
+      <div class="login-wrapper">
+        <div class="form-container">
+          <nav class="login-header">
+            <button
+              class="back-button"
+              type="button"
+              aria-label="Go back to previous page"
+              [attr.tabIndex]="0"
+              (click)="handleBackAction()"
+              (keydown)="handleBackKeydown($event)"
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M15 18L9 12L15 6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                ></path>
+              </svg>
+            </button>
+            <h1 class="login-title">Login</h1>
+          </nav>
+
+          <form
+            class="login-form"
+            [formGroup]="loginForm"
+            (ngSubmit)="handleLoginSubmit()"
+          >
+            <div class="form-field">
+              <label for="email" class="field-label">Email ID</label>
+              <input
+                id="email"
+                type="email"
+                class="field-input"
+                formControlName="email"
+                placeholder="Enter your email"
+                [class.error]="isFieldInvalid('email')"
+                autocomplete="email"
+              />
+              <div class="error-message" *ngIf="isFieldInvalid('email')">
+                Please enter a valid email address
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label for="password" class="field-label">Password</label>
+              <input
+                id="password"
+                type="password"
+                class="field-input"
+                formControlName="password"
+                placeholder="Enter your password"
+                [class.error]="isFieldInvalid('password')"
+                autocomplete="current-password"
+              />
+              <div class="error-message" *ngIf="isFieldInvalid('password')">
+                Password is required
+              </div>
+            </div>
+
+            <button
+              type="button"
+              class="forgot-password-link"
+              (click)="handleForgotPasswordAction()"
+            >
+              Forgot Password?
+            </button>
+
+            <button
+              type="submit"
+              class="login-button"
+              [disabled]="loginForm.invalid || isLoading"
+            >
+              <span *ngIf="!isLoading">Login</span>
+              <span *ngIf="isLoading">Logging in...</span>
+            </button>
+          </form>
+
+          <div class="error-message global-error" *ngIf="errorMessage">
+            {{ errorMessage }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="spacer"></div>
+</main>
