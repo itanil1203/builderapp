@@ -80,6 +80,18 @@ export class LoginComponent implements OnInit {
     alert("Forgot password functionality will be implemented soon.");
   }
 
+  onReset(): void {
+    this.loginForm.reset();
+    // Reset validation states
+    Object.keys(this.loginForm.controls).forEach((key) => {
+      const control = this.loginForm.get(key);
+      if (control) {
+        control.markAsUntouched();
+        control.markAsPristine();
+      }
+    });
+  }
+
   private markFormGroupTouched(): void {
     Object.keys(this.loginForm.controls).forEach((key) => {
       const control = this.loginForm.get(key);
@@ -87,5 +99,9 @@ export class LoginComponent implements OnInit {
         control.markAsTouched();
       }
     });
+  }
+
+  async onSignUp(): Promise<void> {
+    await this.router.navigate(["/signup"]);
   }
 }

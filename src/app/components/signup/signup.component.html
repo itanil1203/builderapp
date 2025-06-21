@@ -1,0 +1,82 @@
+<main class="signup-container">
+  <section class="signup-form-wrapper">
+    <header class="signup-title">Sign Up</header>
+
+    <form [formGroup]="signupForm" (ngSubmit)="onSignup()" class="signup-form">
+      <div class="form-field">
+        <label for="name" class="field-label">Name</label>
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+          class="field-input"
+          placeholder="Enter your full name"
+          [class.error]="isFieldInvalid('name')"
+        />
+        <span *ngIf="isFieldInvalid('name')" class="error-message">
+          Name is required and must be at least 2 characters long
+        </span>
+      </div>
+
+      <div class="form-field">
+        <label for="email" class="field-label">Email ID</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          class="field-input"
+          placeholder="Enter your email"
+          [class.error]="isFieldInvalid('email')"
+        />
+        <span *ngIf="isFieldInvalid('email')" class="error-message">
+          Please enter a valid email address
+        </span>
+      </div>
+
+      <div class="form-field">
+        <label for="password" class="field-label">Password</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          class="field-input"
+          placeholder="Enter your password"
+          [class.error]="isFieldInvalid('password')"
+        />
+        <span *ngIf="isFieldInvalid('password')" class="error-message">
+          Password must be at least 6 characters long
+        </span>
+      </div>
+
+      <div class="button-group">
+        <button
+          type="button"
+          class="reset-button"
+          (click)="onReset()"
+          [disabled]="isLoading"
+        >
+          Reset
+        </button>
+        <button
+          type="submit"
+          class="submit-button"
+          [disabled]="signupForm.invalid || isLoading"
+        >
+          {{ isLoading ? "Creating Account..." : "Submit" }}
+        </button>
+      </div>
+    </form>
+
+    <div class="login-section">
+      <p class="login-text">Already have an account?</p>
+      <button
+        type="button"
+        class="login-link-button"
+        (click)="onBackToLogin()"
+        [disabled]="isLoading"
+      >
+        Back to Login
+      </button>
+    </div>
+  </section>
+</main>
